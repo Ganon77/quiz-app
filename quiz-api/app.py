@@ -6,6 +6,6 @@ app = Flask(__name__)
 def hello_world():
 	x = 'world'
 	return f"Hello, {x}"
-    
+
 if __name__ == "__main__":
-    app.run()
+    app.run(ssl_context='adhoc')
