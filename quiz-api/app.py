@@ -28,7 +28,7 @@ def login():
 
     token = build_token()
 
-    return {"access_token": token}
+    return {"token": token}
 
 if __name__ == "__main__":
     app.run(ssl_context='adhoc')
