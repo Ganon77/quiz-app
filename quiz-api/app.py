@@ -1,5 +1,7 @@
 from flask import Flask, request
-from jwt_utils import build_token
+from jwt_utils import JwtError, build_token, decode_token
+from mapping import CastJsonToQuestion, CastQuestionToJson
+from services import AddQuestionToDatabase
 
 app = Flask(__name__)
 
@@ -29,6 +31,28 @@ def login():
     token = build_token()
 
     return {"token": token}
+
+@app.route("/questions", methods=['POST'])
+def AddQuestion():
+    try:
+        token = request.headers.get("Authorization")[7:]
+        
+        valid = decode_token(token)
+
+        payload = request.get_json()
+
+        question = CastJsonToQuestion(payload)
+
+        AddQuestionToDatabase(question)
+
+        return CastQuestionToJson(question)
+
+    except KeyError:
+        return {"error": 400, "message": "Wrong request format"}, 400
+    except JwtError as e:
+        return {"error": 401, "message": "You do not have the permission to do this", "details":e.message}, 401
+    except RuntimeError as e:
+        return {"error": 500, "message": "Something went wrong while adding the question", "details": str(e)}, 500
 
 if __name__ == "__main__":
     app.run(ssl_context='adhoc')
