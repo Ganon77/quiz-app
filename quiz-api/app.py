@@ -1,7 +1,7 @@
 from flask import Flask, request
 from jwt_utils import JwtError, build_token, decode_token
 from mapping import CastJsonToQuestion, CastQuestionToJson
-from services import AddQuestionToDatabase
+from services import AddQuestionToDatabase, DeleteQuestionFromDatabase, GetQuestionFromDatabase, UpdateQuestionFromDatabase
 
 app = Flask(__name__)
 
@@ -51,8 +51,63 @@ def AddQuestion():
         return {"error": 400, "message": "Wrong request format"}, 400
     except JwtError as e:
         return {"error": 401, "message": "You do not have the permission to do this", "details":e.message}, 401
+    except TypeError as e:
+        return {"error": 401, "message": "You need to specify an Auth"}, 401
     except RuntimeError as e:
         return {"error": 500, "message": "Something went wrong while adding the question", "details": str(e)}, 500
+
+@app.route("/questions/<id>", methods=['GET','DELETE', 'PUT'])
+def GetOrDelQuestion(id:str):
+    try:
+
+        if(request.method == 'GET'):       
+
+            question = GetQuestionFromDatabase(id)
+
+            if(question is None):
+                return {"error": 404, "message": f"Question with id {id} not found"}, 404
+
+            return CastQuestionToJson(question)
+
+        if(request.method == 'PUT'):       
+            
+            token = request.headers.get("Authorization")[7:]
+            valid = decode_token(token)
+
+            question = GetQuestionFromDatabase(id)
+            if(question is None):
+                return {"error": 404, "message": f"Question with id {id} not found"}, 404
+
+            payload = request.get_json()
+            question = CastJsonToQuestion(payload)
+
+            UpdateQuestionFromDatabase(id, question)          
+
+            return CastQuestionToJson(question)
+
+        elif(request.method == 'DELETE'):
+            token = request.headers.get("Authorization")[7:]
+            valid = decode_token(token)
+
+            question = GetQuestionFromDatabase(id)
+
+            if(question is None):
+                return {"error": 404, "message": f"Question with id {id} not found"}, 404
+
+            DeleteQuestionFromDatabase(id)
+            
+            return {"question": CastQuestionToJson(question)}, 204
+
+    except KeyError:
+        return {"error": 400, "message": "Wrong request format"}, 400
+    except JwtError as e:
+        return {"error": 401, "message": "You do not have the permission to do this", "details":e.message}, 401
+    except TypeError as e:
+        return {"error": 401, "message": "You need to specify an Auth"}, 401
+    except RuntimeError as e:
+        return {"error": 500, "message": "Something went wrong while fetching the question", "details": str(e)}, 500
+    except IndexError as e:
+        return {"error": 500, "message": "Something went wrong while fetching the question", "details": str(e)}, 500
 
 if __name__ == "__main__":
     app.run(ssl_context='adhoc')
