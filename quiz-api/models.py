@@ -16,7 +16,7 @@ class Question():
         self.possibleAnswers = possibleAnswers
 
 class Participation():
-    def __init__(self, playerName:str, answers: list[int]):
+    def __init__(self, playerName:str, answers: list[int], score: int=0):
         self.playerName = playerName
         self.answers = answers
-        self.score = 0
+        self.score = score

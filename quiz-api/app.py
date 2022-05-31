@@ -1,9 +1,12 @@
 from flask import Flask, request
+from flask_cors import CORS
 from jwt_utils import JwtError, build_token, decode_token
 from mapping import CastJsonToParticipation, CastJsonToQuestion, CastParticipationToJson, CastQuestionToJson
 from services import *
 
 app = Flask(__name__)
+CORS(app)
+
 
 @app.route('/')
 def hello_world():
@@ -14,8 +17,11 @@ def hello_world():
 def GetQuizInfo():
 
     numberOfQuestion = GetNumberOfQuestions()
+    participations:list = getAllParticipation()
+
+    participations = sorted(participations, key=lambda d: d['score'], reverse=True) 
     
-    return {"size": numberOfQuestion, "scores": []}, 200
+    return {"size": numberOfQuestion, "scores": participations}, 200
 
 
 @app.route('/login', methods=['POST'])

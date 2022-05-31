@@ -1,3 +1,4 @@
+from mapping import CastParticipationToJson
 from models import Answer, Participation, PossibleAnswers, Question
 import sqlite3
 
@@ -244,6 +245,34 @@ def DeleteAllParticipations():
         cur.execute("commit")
 
         db_connection.close()
+
+    except Exception as e:
+        cur.execute('rollback')
+        db_connection.close()
+        raise RuntimeError(str(e))
+
+
+def getAllParticipation():
+    db_connection = sqlite3.connect(database_path)
+    db_connection.isolation_level = None
+    cur = db_connection.cursor()    
+
+    try:
+
+        delete_participation = f"""SELECT DISTINCT playerName,score FROM participation JOIN playerAnswer ON participation.id = playerAnswer.playerId"""
+                         
+        delete_result = cur.execute(delete_participation)
+
+        rows = cur.fetchall()
+
+        participations = []
+
+        for row in rows:
+            participations.append(CastParticipationToJson(Participation(answers=[], playerName=row[0], score=row[1])))
+        
+        db_connection.close()
+
+        return participations
 
     except Exception as e:
         cur.execute('rollback')
