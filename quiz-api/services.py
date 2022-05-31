@@ -1,7 +1,27 @@
-from models import Answer, PossibleAnswers, Question
+from models import Answer, Participation, PossibleAnswers, Question
 import sqlite3
 
 database_path = "../database.db"
+
+def GetNumberOfQuestions():
+    db_connection = sqlite3.connect(database_path)
+    db_connection.isolation_level = None
+    cur = db_connection.cursor()
+
+    try:
+
+        question_data = """SELECT * FROM questions"""
+
+        get_result = cur.execute(question_data)
+
+        rows = cur.fetchall()
+
+        return len(rows)
+
+    except Exception as e:
+        db_connection.close()
+        raise RuntimeError(str(e))
+
 
 def AddQuestionToDatabase(question:Question):
     db_connection = sqlite3.connect(database_path)
@@ -118,6 +138,95 @@ def DeleteQuestionFromDatabase(id:str):
                          
         delete_result = cur.execute(delete_answers)
         delete_result = cur.execute(delete_questions)
+        
+        cur.execute("commit")
+
+        db_connection.close()
+
+    except Exception as e:
+        cur.execute('rollback')
+        db_connection.close()
+        raise RuntimeError(str(e))
+
+
+def AddParticipationToDatabase(participation:Participation):
+    db_connection = sqlite3.connect(database_path)
+    db_connection.isolation_level = None
+    cur = db_connection.cursor()
+
+    cur.execute("begin")
+
+    try:
+
+        insert_player = f"""insert into participation (playerName) values
+        ("{participation.playerName}")"""
+
+        cur.execute(insert_player)
+
+        player_id = cur.lastrowid
+
+        for i in range(len(participation.answers)):
+
+            get_question = f"""SELECT id FROM questions WHERE position={i+1}"""
+
+            get_result = cur.execute(get_question)
+
+            rows = cur.fetchall()
+
+            if(len(rows) == 0):
+                raise IndexError("Not found")
+
+            questionId = rows[0][0]
+
+            get_answers = f"""SELECT id, isCorrect FROM answers WHERE questionId={questionId}"""
+
+            get_result = cur.execute(get_answers)
+
+            if(len(rows) == 0):
+                raise IndexError(f"No answers for question with id : {questionId}")
+
+            rows = cur.fetchall()
+
+            answerId = rows[participation.answers[i] - 1][0]           
+
+            if(rows[participation.answers[i] - 1][1]):
+                participation.score += 1
+
+            insert_player_answer = f"""insert into playerAnswer (playerId, answerId) values
+            ({player_id}, {answerId})"""
+
+            cur.execute(insert_player_answer)
+
+        update_question = f"""UPDATE participation
+        SET score={participation.score}
+        WHERE id={player_id}"""
+
+        cur.execute("commit")        
+
+        db_connection.close()
+
+        return participation
+        
+    except Exception as e:
+        cur.execute('rollback')
+        db_connection.close()
+        raise RuntimeError(str(e))
+
+
+def DeleteAllParticipations():
+    db_connection = sqlite3.connect(database_path)
+    db_connection.isolation_level = None
+    cur = db_connection.cursor()    
+
+    cur.execute("begin")
+
+    try:
+
+        delete_participation = f"""DELETE FROM participation"""
+        delete_answers = f"""DELETE FROM playerAnswer"""
+                         
+        delete_result = cur.execute(delete_participation)
+        delete_result = cur.execute(delete_answers)
         
         cur.execute("commit")
 

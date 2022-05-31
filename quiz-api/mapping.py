@@ -1,4 +1,4 @@
-from models import Answer, PossibleAnswers, Question
+from models import Answer, Participation, PossibleAnswers, Question
 
 
 def CastJsonToQuestion(payload):
@@ -50,3 +50,17 @@ def CastPossibleAnswersToJson(answers: PossibleAnswers):
     return [
         CastAnswerToJson(answer) for answer in answers.possibleAnswers
     ]
+
+def CastParticipationToJson(paritcipation: Participation):
+    return {
+        "playerName": paritcipation.playerName,
+        "answers": paritcipation.answers,
+        "score": paritcipation.score
+    }
+
+def CastJsonToParticipation(payload: dict):
+    keys = payload.keys()
+    if("playerName" not in keys or "answers" not in keys):
+        raise KeyError("Wrong format")
+
+    return Participation(payload["playerName"], payload["answers"])

@@ -14,3 +14,9 @@ class Question():
         self.position = position
         self.image = image
         self.possibleAnswers = possibleAnswers
+
+class Participation():
+    def __init__(self, playerName:str, answers: list[int]):
+        self.playerName = playerName
+        self.answers = answers
+        self.score = 0
