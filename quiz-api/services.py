@@ -32,10 +32,17 @@ def AddQuestionToDatabase(question:Question):
 
     try:
 
+        update_question_all = f"""UPDATE questions
+        SET position=position+1
+        WHERE position >= {question.position}"""
+
         insert_question = f"""insert into questions (title, text, position, image) values
         ("{question.title}","{question.text}",{question.position},"{question.image}")"""
 
+        cur.execute(update_question_all)
+
         insertion_result = cur.execute(insert_question)
+        
 
         question_id = cur.lastrowid
 
@@ -97,6 +104,11 @@ def UpdateQuestionFromDatabase(id:str, questionUpdated:Question):
     cur.execute("begin")
 
     try:
+
+        update_question_all = f"""UPDATE questions
+        SET position=position+1
+        WHERE position >= {questionUpdated.position}"""
+
         update_question = f"""UPDATE questions
         SET text="{questionUpdated.text}",
         title="{questionUpdated.title}",
@@ -106,7 +118,8 @@ def UpdateQuestionFromDatabase(id:str, questionUpdated:Question):
 
         delete_answers = f"""DELETE FROM answers WHERE questionId = {id}"""
 
-        delete_result = cur.execute(update_question)
+        delete_result = cur.execute(update_question_all)
+        cur.execute(update_question)
         delete_result = cur.execute(delete_answers)
 
         for answer in questionUpdated.possibleAnswers.possibleAnswers:
