@@ -145,4 +145,4 @@ def createParticipation():
         return {"error": 500, "message": "Something went wrong while adding the pariticipation", "details": str(e)}, 500
 
 if __name__ == "__main__":
-    app.run(ssl_context='adhoc')
+    app.run()
