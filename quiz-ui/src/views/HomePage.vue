@@ -1,11 +1,30 @@
-<template>
-  <h1>Home page</h1>
+<style>
+@import '../assets/css/home.css';
+</style>
 
-  <div v-for="scoreEntry in registeredScores" v-bind:key="scoreEntry.date">
-    {{ scoreEntry.playerName }} - {{ scoreEntry.score }}
+<template>
+  <div class="grand-container">
+    <div class="title">
+      <h1>Monkey Quiz</h1>
+      <img src="../assets/pics/logo.png" />
+    </div>
+
+    <div class="big-container">
+      <div v-for="(scoreEntry, index) in registeredScores" v-bind:key="scoreEntry.date"
+        v-bind:class="'n' + index + ' box'">
+        {{ scoreEntry.playerName }} - {{ scoreEntry.score }}
+      </div>
+    </div>
+
+    <router-link to="/start-quiz">
+      <button>
+        Démarrer le quiz !
+      </button>
+    </router-link>
+
+
   </div>
 
-  <router-link to="/start-quiz">Démarrer le quiz !</router-link>
 </template>
 
 <script>
