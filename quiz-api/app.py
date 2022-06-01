@@ -41,20 +41,28 @@ def login():
 
     return {"token": token}
 
-@app.route("/questions", methods=['POST'])
+@app.route("/questions", methods=['POST', 'GET'])
 def AddQuestion():
     try:
-        token = request.headers.get("Authorization")[7:]
+
+
+        if(request.method == 'POST'):
+            token = request.headers.get("Authorization")[7:]
+            
+            valid = decode_token(token)
+
+            payload = request.get_json()
+
+            question = CastJsonToQuestion(payload)
+
+            AddQuestionToDatabase(question)
+
+            return CastQuestionToJson(question)
         
-        valid = decode_token(token)
+        if(request.method == 'GET'):
+            questions = GetAllQuestionsFromDatabase()
 
-        payload = request.get_json()
-
-        question = CastJsonToQuestion(payload)
-
-        AddQuestionToDatabase(question)
-
-        return CastQuestionToJson(question)
+            return {"questions": questions} 
 
     except KeyError:
         return {"error": 400, "message": "Wrong request format"}, 400

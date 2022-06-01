@@ -6,7 +6,7 @@
 <template>
   <h1>Quiz</h1>
 
-  <form>
+  <form action="Questions.vue">
     <div class="form-container">
       <div class="name-wrapper">
         <label for="name">Saississez votre nom:</label>

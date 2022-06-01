@@ -1,4 +1,4 @@
-from mapping import CastParticipationToJson
+from mapping import CastParticipationToJson, CastQuestionToJson
 from models import Answer, Participation, PossibleAnswers, Question
 import sqlite3
 
@@ -61,6 +61,46 @@ def AddQuestionToDatabase(question:Question):
 
     except Exception as e:
         cur.execute('rollback')
+        db_connection.close()
+        raise RuntimeError(str(e))
+
+def GetAllQuestionsFromDatabase():
+    db_connection = sqlite3.connect(database_path)
+    db_connection.isolation_level = None
+    cur = db_connection.cursor()    
+
+    try:
+
+        question_data = f"""SELECT questions.text, title, position, image, answers.text, isCorrect FROM questions
+        JOIN answers ON answers.questionId = questions.id"""
+
+        get_result = cur.execute(question_data)
+
+        rows = cur.fetchall()
+
+        questions = []
+        answers = []
+
+        cmpt = 0
+        for i in range(1, len(rows)):
+            if cmpt == 4:
+                question = Question(title=rows[i-1][1], text=rows[i-1][0], position=rows[i-1][2], image=rows[i-1][3], possibleAnswers=PossibleAnswers(answers))
+                questions.append(CastQuestionToJson(question))
+                answers = []
+                answers.append(Answer(text=rows[i][-2], isCorrect=bool(rows[i-1][-1])))
+                cmpt = 0
+            else:
+                answers.append(Answer(text=rows[i][-2], isCorrect=bool(rows[i-1][-1])))
+            
+            cmpt += 1
+                
+                
+
+        db_connection.close()
+
+        return questions
+
+    except Exception as e:
         db_connection.close()
         raise RuntimeError(str(e))
 
