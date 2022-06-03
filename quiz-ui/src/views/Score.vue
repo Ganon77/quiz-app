@@ -1,12 +1,22 @@
 <style>
+@import '../assets/css/score.css';
 </style>
 
 
 <template>
-    <div>
-        <h1>Votre Score : {{score}}</h1>
+    <div class="score-wrapper">
+        <h1>{{playerName}} vous avez {{score}} bonnes réponses</h1>
+      
+        <div class="top3">
+          <h2>Top 3 des meilleurs joueurs</h2>
+          <div v-for="index in 3">
+            <div class="box">
+              {{ registeredScores[index-1].playerName }} - {{ registeredScores[index-1].score }}
+            </div>
+          </div>
+        </div>
 
-        <div class="start-quiz">
+        <div class="back-home">
           <button @click="goBackHome" type="submit">Retour</button>
         </div>
     </div>
@@ -14,6 +24,7 @@
 
 <script>
 import participationStorageService from "../services/ParticipationStorageService";
+import quizApiService from "@/services/quizApiService";
 
 export default {
   name: "Score",
@@ -21,11 +32,16 @@ export default {
     return {
         playerName: "",
         score: 0,
+        registeredScores: []
     };
   },
   async created() {
       this.playerName = participationStorageService.getPlayerName();
       this.score = participationStorageService.getParticipationScore();
+
+      await quizApiService.getQuizInfo().then((response) => {
+        this.registeredScores = response.data.scores
+      })
   },
   methods: {
     goBackHome() {

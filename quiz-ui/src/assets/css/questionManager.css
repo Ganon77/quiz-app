@@ -1,0 +1,16 @@
+.bullet-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.bullet {
+    width: 25px;
+    height: 25px;
+    background: white;
+    border-radius: 100%;
+    margin: 10px;
+}
+
+.active {
+    background: black;
+}

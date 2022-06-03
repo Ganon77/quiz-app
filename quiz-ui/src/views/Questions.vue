@@ -3,7 +3,6 @@
 
 
 <template>
-  <h1>Questions</h1>
   <QuestionsManager></QuestionsManager>
 </template>
 

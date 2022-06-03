@@ -4,11 +4,15 @@
 
 <template>
   <div v-if="question" class="answer-container">
-    <h2 >{{question.text}}</h2>
+    <h2>{{question.text}}</h2>
     <img class="pic" v-if="question.image" :src="question.image" />
-    <div v-for="(answer, index) in question.possibleAnswers" class="answer" @click="$emit('answer-selected', index+1)">
-      <a class="answerText">{{answer.text}}</a>
+
+    <div class="answer-wrapper">
+      <div v-for="(answer, index) in question.possibleAnswers" class="answer" @click="$emit('answer-selected', index+1)">
+        <div class="answerText">{{answer.text}}</div>
+      </div>
     </div>
+    
   </div>  
 </template>
 

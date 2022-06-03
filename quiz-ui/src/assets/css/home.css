@@ -29,7 +29,7 @@ body {
   width: 100%;
 }
 
-.box {
+.home-big-container > .box {
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -39,41 +39,46 @@ body {
   color: white
 }
 
-.n0 {
+.home-big-container > .n0 {
   display: flex;
   background: green;
   grid-column-start: 1;
   grid-column-end: 5;
   width: 100%;
   height: 150px;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   text-align: center;
   border-radius: 10px;
 }
 
-.n1 {
+.home-big-container > .n1 {
   display: flex;
   background: green;
   grid-column-start: 1;
   grid-column-end: 3;
   height: 100px;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   text-align: center;
   border-radius: 10px;
 }
 
-.n2 {
+.home-big-container > .n2 {
   display: flex;
   background: green;
   grid-column-start: 3;
   grid-column-end: 5;
   height: 100px;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   text-align: center;
   border-radius: 10px;
+}
+
+.picto {
+  width: 50px;
+  height: 50px;
 }
 
 button {

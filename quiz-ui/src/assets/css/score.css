@@ -1,0 +1,30 @@
+.score-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.back-home {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 25px;
+    width: 50%;
+    height: 50px;
+}
+
+.back-home > button {
+    color: white;
+}
+
+.top3 {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+
+    margin-top: 50px;
+}
+
+.box {
+    background: green;
+    margin: 20px;
+}

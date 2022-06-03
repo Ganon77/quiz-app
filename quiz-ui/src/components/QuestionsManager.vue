@@ -1,7 +1,17 @@
+<style>
+@import '../assets/css/questionManager.css';
+</style>
 
 <template>
-  <h1 v-if="currentQuestion">Question {{ currentQuestionPosition }} / {{ totalNumberOfQuestion }}</h1>
-  <QuestionDisplay v-if="currentQuestion" :question="currentQuestion" @answer-selected="answerClickedHandler" v-bind:is="QuestionDisplay"/>
+  <div>
+    <div class="bullet-wrapper">
+      <template v-for="index in totalNumberOfQuestion" :key="index">
+        <div class="bullet" v-bind:class="{ active: index == currentQuestionPosition}"></div>
+      </template>
+    </div>
+    <QuestionDisplay v-if="currentQuestion" :question="currentQuestion" @answer-selected="answerClickedHandler" v-bind:is="QuestionDisplay"/>
+  </div>
+  
 </template>
 
 <script>
@@ -30,8 +40,12 @@ export default {
     await quizApiService.getQuizInfo().then((response) => {
       this.totalNumberOfQuestion = response.data.size;
     })
-  }
-  ,
+  },
+  computed: {
+    IsActive: function (index) {
+      return index == currentQuestionPosition
+    }
+  },
   methods: {
     async loadQuestionByPosition(){
       await quizApiService.getQuestion(this.currentQuestionPosition).then((response) => {
