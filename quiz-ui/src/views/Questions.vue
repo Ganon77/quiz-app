@@ -16,14 +16,10 @@ export default {
     return {
     };
   },
-  methods: {
-
-  },
   components: {
     QuestionsManager
   },
   async created() {
-    console.log(this.username);
   }
 
 };

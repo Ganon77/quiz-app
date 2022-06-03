@@ -33,7 +33,7 @@ export default {
   getAllQuestions() {
     return this.call("get", "questions");
   },
-  async getQuestion(position) {
+  getQuestion(position) {
     return this.call("get", "questions/" + position);
   },
   registerParticipation(payload) {

@@ -9,7 +9,7 @@
       <img src="../assets/pics/logo.png" />
     </div>
 
-    <div class="big-container">
+    <div class="home-big-container">
       <div v-for="(scoreEntry, index) in registeredScores" v-bind:key="scoreEntry.date"
         v-bind:class="'n' + index + ' box'">
         {{ scoreEntry.playerName }} - {{ scoreEntry.score }}

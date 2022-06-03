@@ -3,15 +3,20 @@ export default {
     localStorage.removeItem('playerName')
   },
   savePlayerName(playerName) {
-    window.localStorage.setItem("playerName", playerName);
+    if(playerName){
+      console.log(playerName)
+      localStorage.setItem("playerName", playerName);
+    }      
+    else
+      console.log("playerName undefined")
   },
   getPlayerName() {
-    window.localStorage.getItem("playerName");
+    return localStorage.getItem("playerName");
   },
   saveParticipationScore(participationScore) {
-    // todo : implement
+    localStorage.setItem("score", participationScore);
   },
   getParticipationScore() {
-    // todo : implement
+    return localStorage.getItem("score");
   }
 };

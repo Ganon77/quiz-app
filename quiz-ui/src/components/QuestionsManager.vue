@@ -7,7 +7,7 @@
 <script>
 import QuestionDisplay from "./QuestionDisplay.vue"
 import quizApiService from "@/services/quizApiService";
-import participationStorageService from "../services/ParticipationStorageService";
+import participationStorageService from "@/services/ParticipationStorageService";
 
 export default {
   name: "QuestionManager",
@@ -16,6 +16,7 @@ export default {
       currentQuestionPosition: 1,
       totalNumberOfQuestion: 1,
       currentQuestion: null,
+      playerName: "",
       answers: []
     };
   },
@@ -23,7 +24,7 @@ export default {
     QuestionDisplay
   },
   async created() {
-    
+    this.playerName = participationStorageService.getPlayerName();
     this.loadQuestionByPosition();
 
     await quizApiService.getQuizInfo().then((response) => {
@@ -42,21 +43,26 @@ export default {
         this.answers.push(answer)
         this.currentQuestionPosition++;
 
-        if(this.currentQuestionPosition < this.totalNumberOfQuestion){
+        if(this.currentQuestionPosition <= this.totalNumberOfQuestion){
           this.loadQuestionByPosition()
         }
         else{
-          this.endQuiz()
+          this.currentQuestionPosition--;
+          this.endQuiz();
         }
     },
 
     async endQuiz(){
-        payload = {
-          'playerName': participationStorageService.getPlayerName(),
+        var payload = {
+          'playerName':  this.playerName,
           'answers': this.answers
         };
 
-        quizApiService.registerParticipation(payload)
+        quizApiService.registerParticipation(JSON.stringify(payload)).then((response) => {
+          console.log(response);
+          participationStorageService.saveParticipationScore(response.data.score)
+          this.$router.push('/score');
+        });
     }
   }
 }
