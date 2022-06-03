@@ -255,6 +255,8 @@ def AddParticipationToDatabase(participation:Participation):
         SET score={participation.score}
         WHERE id={player_id}"""
 
+        cur.execute(update_question)
+
         cur.execute("commit")        
 
         db_connection.close()

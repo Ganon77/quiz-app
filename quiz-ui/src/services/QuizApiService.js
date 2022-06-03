@@ -35,5 +35,8 @@ export default {
   },
   async getQuestion(position) {
     return this.call("get", "questions/" + position);
+  },
+  registerParticipation(payload) {
+    return this.call("post", "participations", payload);
   }
 };
