@@ -10,12 +10,11 @@
     </div>
 
     <div class="home-big-container">
-      <div v-for="(scoreEntry, index) in registeredScores" v-bind:key="scoreEntry.date"
-        v-bind:class="'n' + index + ' box'">
-        {{ scoreEntry.playerName }} - {{ scoreEntry.score }}
-        <img class="picto" src="../assets/pics/banana_3.png" v-if="index == 0" />
-        <img class="picto" src="../assets/pics/banana_2.png" v-if="index == 1" />
-        <img class="picto" src="../assets/pics/banana_1.png" v-if="index == 2" />
+      <div v-for="index in 6" v-bind:class="'n' + index + ' box'">
+        {{ registeredScores[index-1].playerName }} - {{ registeredScores[index-1].score }}
+        <img class="picto" src="../assets/pics/banana_3.png" v-if="index == 1" />
+        <img class="picto" src="../assets/pics/banana_2.png" v-if="index == 2" />
+        <img class="picto" src="../assets/pics/banana_1.png" v-if="index == 3" />
       </div>
     </div>
 

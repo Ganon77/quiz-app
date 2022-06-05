@@ -18,9 +18,9 @@ import { RouterLink, RouterView } from 'vue-router'
           </div>
         </RouterLink>
 
-        <RouterLink to="/about" class="navlink">
+        <RouterLink to="/admin" class="navlink">
           <div class="linkContent">
-            About
+            Admin
           </div>
         </RouterLink>
       </nav>

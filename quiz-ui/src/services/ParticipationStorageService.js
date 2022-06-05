@@ -18,5 +18,11 @@ export default {
   },
   getParticipationScore() {
     return localStorage.getItem("score");
+  },
+  saveAccessToken(token) {
+    localStorage.setItem("token", token);
+  },
+  getAccessToken() {
+    return localStorage.getItem("token");
   }
 };

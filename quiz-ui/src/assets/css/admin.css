@@ -1,0 +1,30 @@
+.login-form {
+    position: fixed;
+    top: 50%;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-wrapper{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.login-wrapper > label {
+    font-size: larger;
+}
+
+.submit-login {
+    margin-top: 20px;
+    color: white;
+    background: brown;
+    border: none;
+    border-radius: 10px;
+    width: 25%;
+    height: 40px;
+}

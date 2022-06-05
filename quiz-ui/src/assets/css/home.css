@@ -5,6 +5,7 @@
 
 body {
   background: linear-gradient(to bottom, rgb(4, 197, 52, 0.6), rgb(158, 219, 185));
+  margin: 0;
 }
 
 .grand-container {
@@ -39,12 +40,11 @@ body {
   color: white
 }
 
-.home-big-container > .n0 {
+.home-big-container > .n1 {
   display: flex;
   background: green;
   grid-column-start: 1;
   grid-column-end: 5;
-  width: 100%;
   height: 150px;
   justify-content: center;
   align-items: center;
@@ -52,7 +52,7 @@ body {
   border-radius: 10px;
 }
 
-.home-big-container > .n1 {
+.home-big-container > .n2 {
   display: flex;
   background: green;
   grid-column-start: 1;
@@ -64,7 +64,7 @@ body {
   border-radius: 10px;
 }
 
-.home-big-container > .n2 {
+.home-big-container > .n3 {
   display: flex;
   background: green;
   grid-column-start: 3;

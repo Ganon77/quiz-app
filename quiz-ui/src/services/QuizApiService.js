@@ -38,5 +38,8 @@ export default {
   },
   registerParticipation(payload) {
     return this.call("post", "participations", payload);
+  },
+  login(payload){
+    return this.call("post", "login", payload);
   }
 };

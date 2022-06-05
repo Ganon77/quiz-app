@@ -9,11 +9,11 @@
       
         <div class="top3">
           <h2>Top 3 des meilleurs joueurs</h2>
-          <div v-for="index in 3">
+          <template v-for="index in 3">
             <div class="box">
               {{ registeredScores[index-1].playerName }} - {{ registeredScores[index-1].score }}
             </div>
-          </div>
+          </template>
         </div>
 
         <div class="back-home">

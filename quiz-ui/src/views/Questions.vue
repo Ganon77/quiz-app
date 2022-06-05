@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import participationStorageService from "../services/ParticipationStorageService";
 import QuestionsManager from '../components/QuestionsManager.vue'
 export default {
   name: "Questions",

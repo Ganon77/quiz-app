@@ -72,7 +72,7 @@ def GetAllQuestionsFromDatabase():
     try:
 
         question_data = f"""SELECT questions.text, title, position, image, answers.text, isCorrect FROM questions
-        JOIN answers ON answers.questionId = questions.id"""
+        JOIN answers ON answers.questionId = questions.position"""
 
         get_result = cur.execute(question_data)
 
@@ -81,20 +81,18 @@ def GetAllQuestionsFromDatabase():
         questions = []
         answers = []
 
-        cmpt = 0
         for i in range(1, len(rows)):
-            if cmpt == 4:
+            if i % 4 == 0:
                 question = Question(title=rows[i-1][1], text=rows[i-1][0], position=rows[i-1][2], image=rows[i-1][3], possibleAnswers=PossibleAnswers(answers))
                 questions.append(CastQuestionToJson(question))
                 answers = []
                 answers.append(Answer(text=rows[i][-2], isCorrect=bool(rows[i-1][-1])))
-                cmpt = 0
             else:
                 answers.append(Answer(text=rows[i][-2], isCorrect=bool(rows[i-1][-1])))
-            
-            cmpt += 1
                 
-                
+        
+        question = Question(title=rows[-1][1], text=rows[-1][0], position=rows[-1][2], image=rows[-1][3], possibleAnswers=PossibleAnswers(answers))
+        questions.append(CastQuestionToJson(question))
 
         db_connection.close()
 
@@ -112,8 +110,8 @@ def GetQuestionFromDatabase(id:str):
     try:
 
         question_data = f"""SELECT questions.text, title, position, image, answers.text, isCorrect FROM questions
-        JOIN answers ON answers.questionId = questions.id
-        WHERE questions.id = {id}"""
+        JOIN answers ON answers.questionId = questions.position
+        WHERE questions.position = {id}"""
 
         get_result = cur.execute(question_data)
 
@@ -155,7 +153,7 @@ def UpdateQuestionFromDatabase(id:str, questionUpdated:Question):
         title="{questionUpdated.title}",
         position={questionUpdated.position},
         image="{questionUpdated.image}"
-        WHERE id={id}"""
+        WHERE position={id}"""
 
         delete_answers = f"""DELETE FROM answers WHERE questionId = {id}"""
 

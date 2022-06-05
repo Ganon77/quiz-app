@@ -3,7 +3,8 @@ import HomePage from '../views/HomePage.vue'
 import StartQuiz from '../views/StartQuiz.vue'
 import Questions from '../views/Questions.vue'
 import Score from '../views/Score.vue'
-
+import Admin from '../views/Admin.vue'
+import AdminQuestionDisplay from '../views/AdminQuestionDisplay.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,9 +15,15 @@ const router = createRouter({
       component: HomePage,
     },
     {
-      path: "/about",
-      name: "StartQuiz",
-      component: StartQuiz,
+      path: "/admin",
+      name: "Admin",
+      component: Admin,
+    },    
+    {
+      path: "/question-display/:position",
+      name: "AdminQuestionDisplay",
+      props: true,
+      component: AdminQuestionDisplay,
     },
     {
       path: "/start-quiz",
