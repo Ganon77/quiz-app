@@ -150,11 +150,17 @@ def UpdateQuestionFromDatabase(position:str, questionUpdated:Question):
         id = rows[0][0]
         old_position = rows[0][1]
 
-        if(old_position != questionUpdated.position):
+        if(old_position < questionUpdated.position):
             update_question_all_back = f"""UPDATE questions
             SET position=position-1
-            WHERE position <= {questionUpdated.position}"""
+            WHERE position <= {questionUpdated.position} AND position > {old_position}"""
             cur.execute(update_question_all_back)
+        elif(old_position > questionUpdated.position):
+            update_question_all_back = f"""UPDATE questions
+            SET position=position+1
+            WHERE position >= {questionUpdated.position} AND position < {old_position}"""
+            cur.execute(update_question_all_back)
+
 
         update_question = f"""UPDATE questions
         SET text="{questionUpdated.text}",

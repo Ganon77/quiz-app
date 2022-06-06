@@ -44,7 +44,7 @@ export default {
 
         if(currentTime > decoded.exp){
             participationStorageService.deleteAccessToekn();
-            this.$router.push("/admin");
+            this.token = null;
         }
   },
   components: {

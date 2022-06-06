@@ -9,7 +9,7 @@
       <img src="../assets/pics/logo.png" />
     </div>
 
-    <div class="home-big-container">
+    <div class="home-big-container" v-if="registeredScores.length > 0">
       <template v-for="index in 6">
         <div v-if="index <= 3"  v-bind:class="'n' + index">
           {{ registeredScores[index-1].playerName }} - {{ registeredScores[index-1].score }}
@@ -28,8 +28,6 @@
         Démarrer le quiz !
       </button>
     </router-link>
-
-
   </div>
 
 </template>

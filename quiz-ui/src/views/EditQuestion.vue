@@ -145,8 +145,6 @@ export default {
             ]
         };
 
-        console.log(JSON.stringify(body))
-
         await quizApiService.changeQuestion("PUT", JSON.stringify(body), this.token, this.$route.params.position).then((response) => {
             this.$router.push("/question-display/"+this.position)
         })
