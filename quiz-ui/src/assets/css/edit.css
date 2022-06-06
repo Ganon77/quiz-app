@@ -41,13 +41,26 @@
 
 .image-container > img{
     margin: 5px;
+    width: 700px;
+    height: 400px;
+}
+
+.submit-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;    
 }
 
 .submit {
-    background: brown;
-    color: white;
+    background: #6B8C42;
+    color: #FFFFB5;
     border: none;
     border-radius: 5px;
     width: 25%;
     height: 50px;
+    margin: 5px;
+}
+
+.submit:hover {
+    background: #5A3921;
 }

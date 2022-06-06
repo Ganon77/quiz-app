@@ -7,7 +7,7 @@ nav {
   align-items: center;
   width: 100%;
   justify-content: space-around;
-  background: linear-gradient(to bottom, rgba(0, 165, 0, 0.6), rgb(4, 197, 52, 0.6));
+  background: linear-gradient(to bottom, #6B8C42, #7BC67B);
   border-radius: 0 0 8px 8px;
 
 }
@@ -19,16 +19,17 @@ nav {
   justify-content: space-around;
   align-items: center;
   text-decoration: none;
+  font-family: 'Jungle Monkey';
+  font-size: 28px;
 }
 
 .navlink:hover {
   cursor: pointer;
   text-decoration: none;
-  background: linear-gradient(to bottom, rgba(0, 165, 0, 0.8), rgb(4, 197, 52, 0.8));
-  ;
+  background:  #5A3921;
 }
 
 .linkContent {
-  color: white;
+  color: #FFFFB5;
   font-size: larger;
 }

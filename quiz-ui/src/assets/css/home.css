@@ -4,7 +4,8 @@
 }
 
 body {
-  background: linear-gradient(to bottom, rgb(4, 197, 52, 0.6), rgb(158, 219, 185));
+  background: linear-gradient(to bottom, #7BC67B, #FFFFB5);
+  color: #5A3921;
   margin: 0;
 }
 
@@ -19,6 +20,7 @@ body {
   align-items: center;
   font-family: 'Jungle Monkey';
   font-weight: bolder;
+  color: #FFFFB5
 }
 
 .home-big-container {
@@ -27,22 +29,23 @@ body {
   grid-gap: 10px;
   grid-auto-rows: minmax(100px, auto);
   margin-top: 50px;
-  width: 100%;
+  width: 95%;
 }
 
 .home-big-container > .box {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background: brown;
+  background: #5A3921;
   height: 50px;
   border-radius: 10px;
-  color: white
+  color: #FFFFB5;
+  left: 50%;
 }
 
 .home-big-container > .n1 {
   display: flex;
-  background: green;
+  background: #6B8C42;
   grid-column-start: 1;
   grid-column-end: 5;
   height: 150px;
@@ -50,11 +53,12 @@ body {
   align-items: center;
   text-align: center;
   border-radius: 10px;
+  color: #FFFFB5
 }
 
 .home-big-container > .n2 {
   display: flex;
-  background: green;
+  background: #6B8C42;
   grid-column-start: 1;
   grid-column-end: 3;
   height: 100px;
@@ -62,18 +66,20 @@ body {
   align-items: center;
   text-align: center;
   border-radius: 10px;
+  color: #FFFFB5
 }
 
 .home-big-container > .n3 {
   display: flex;
-  background: green;
+  background: #6B8C42;
   grid-column-start: 3;
   grid-column-end: 5;
   height: 100px;
   justify-content: center;
   align-items: center;
   text-align: center;
-  border-radius: 10px;
+  border-radius: 10px;  
+  color: #FFFFB5
 }
 
 .picto {
@@ -84,9 +90,14 @@ body {
 button {
   width: inherit;
   height: inherit;
-  background: brown;
+  background: #7BC67B;
   border: none;
   border-radius: 10px;
+  color: #FFFFB5;
+}
+
+button:hover {
+  background: #5A3921;
 }
 
 a {

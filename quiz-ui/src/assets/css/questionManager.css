@@ -6,11 +6,11 @@
 .bullet {
     width: 25px;
     height: 25px;
-    background: white;
+    background: #FFFFB5;
     border-radius: 100%;
     margin: 10px;
 }
 
 .active {
-    background: black;
+    background: #5A3921;
 }

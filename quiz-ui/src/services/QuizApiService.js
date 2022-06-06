@@ -10,6 +10,7 @@ export default {
     var headers = {
       "Content-Type": "application/json",
     };
+
     if (token != null) {
       headers.authorization = "Bearer " + token;
     }
@@ -45,7 +46,7 @@ export default {
   changeQuestion(method, body, token, oldPosition){
     return this.call(method, "questions/"+oldPosition, body, token);
   },
-  validate(token){
-    return this.call("post", "valid/", token=token);
+  deleteQuestion(token, position){
+    return this.call("delete", "questions/"+position, null, token);
   }
 };

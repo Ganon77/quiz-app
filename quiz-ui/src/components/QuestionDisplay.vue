@@ -25,7 +25,7 @@
 
     <div v-if="isAdmin" class="button-wrapper">
       <button class="button" @click="goToEdit">Modifier</button>
-      <button class="button">Supprimer</button>
+      <button class="button" @click="$emit('delete-selected', question.position)">Supprimer</button>
     </div>
     
   </div>  

@@ -52,8 +52,11 @@
             <img v-bind:src="image"/>
         </div>
         
-
-        <input class="submit" type="submit" value="Modifier"/>
+        <div class="submit-container">
+            <input class="submit" type="submit" value="Modifier"/>
+            <button class="submit" @click="cancel">Annuler</button>
+        </div>
+        
     </form> 
   </div>  
 </template>
@@ -145,9 +148,11 @@ export default {
         console.log(JSON.stringify(body))
 
         await quizApiService.changeQuestion("PUT", JSON.stringify(body), this.token, this.$route.params.position).then((response) => {
-            console.log(response)
-            this.question = response.data;
+            this.$router.push("/question-display/"+this.position)
         })
+    },
+    cancel(){
+        this.$router.push("/question-display/"+this.$route.params.position)
     }
   }
 }

@@ -47,8 +47,6 @@ def AddQuestionToDatabase(question:Question):
 
         question_id = cur.lastrowid
 
-        print(question_id)
-
         for answer in question.possibleAnswers.possibleAnswers:
             insert_answers = f"""insert into answers (text, isCorrect, questionId) values
             ("{answer.text}", {answer.isCorrect}, {question_id})"""
@@ -144,17 +142,19 @@ def UpdateQuestionFromDatabase(position:str, questionUpdated:Question):
 
     try:
 
-        question = f"""SELECT id FROM questions WHERE position = {position}"""
-        print(question)
+        question = f"""SELECT id, position FROM questions WHERE position = {position}"""
         cur.execute(question)
 
         rows = cur.fetchall()
 
         id = rows[0][0]
+        old_position = rows[0][1]
 
-        update_question_all_back = f"""UPDATE questions
-        SET position=position-1
-        WHERE position <= {questionUpdated.position}"""
+        if(old_position != questionUpdated.position):
+            update_question_all_back = f"""UPDATE questions
+            SET position=position-1
+            WHERE position <= {questionUpdated.position}"""
+            cur.execute(update_question_all_back)
 
         update_question = f"""UPDATE questions
         SET text="{questionUpdated.text}",
@@ -163,18 +163,15 @@ def UpdateQuestionFromDatabase(position:str, questionUpdated:Question):
         image="{questionUpdated.image}"
         WHERE id={id}"""
 
-        delete_answers = f"""DELETE FROM answers WHERE questionId = {id}"""
-
-        cur.execute(update_question_all_back)
+        delete_answers = f"""DELETE FROM answers WHERE questionId = {id}"""        
         cur.execute(update_question)
         delete_result = cur.execute(delete_answers)
 
         for answer in questionUpdated.possibleAnswers.possibleAnswers:
             insert_answers = f"""insert into answers (text, isCorrect, questionId) values
             ("{answer.text}", {answer.isCorrect}, {id})"""
-
             insertion_answer = cur.execute(insert_answers)
-        
+                    
         cur.execute("commit")
 
         db_connection.close()
@@ -206,6 +203,13 @@ def DeleteQuestionFromDatabase(position:str):
                          
         delete_result = cur.execute(delete_answers)
         delete_result = cur.execute(delete_questions)
+
+        update_question_all_back = f"""UPDATE questions
+            SET position=position-1
+            WHERE position > {position}"""
+
+        print(update_question_all_back)
+        cur.execute(update_question_all_back)
         
         cur.execute("commit")
 

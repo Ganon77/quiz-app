@@ -8,8 +8,8 @@
 .question {
     display: flex;
     align-items: center;
-    background: green;
-    color: white;
+    background: #6B8C42;
+    color: #FFFFB5;
     width: 50%;
     height: 60px;
     margin: 6px;
@@ -17,7 +17,7 @@
 }
 
 .question:hover {
-    background: rgb(0, 83, 0);
+    background: #5A3921;
     cursor: pointer;
 }
 

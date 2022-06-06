@@ -21,10 +21,14 @@
 
 .submit-login {
     margin-top: 20px;
-    color: white;
-    background: brown;
+    color: #FFFFB5;
+    background: #7BC67B;
     border: none;
     border-radius: 10px;
     width: 25%;
     height: 40px;
+}
+
+.submit-login:hover {
+    background: #5A3921;
 }

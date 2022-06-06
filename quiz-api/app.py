@@ -75,7 +75,7 @@ def AddQuestion():
     except JwtError as e:
         return {"error": 401, "message": "You do not have the permission to do this", "details":e.message}, 401
     except TypeError as e:
-        return {"error": 401, "message": "You need to specify an Auth"}, 401
+        return {"error": 401, "message": "You need to specify an Auth", "details": str(e)}, 401
     except RuntimeError as e:
         return {"error": 500, "message": "Something went wrong while adding the question", "details": str(e)}, 500
 
@@ -111,6 +111,7 @@ def GetOrDelQuestion(id:str):
             return CastQuestionToJson(question)
 
         elif(request.method == 'DELETE'):
+            print(request.headers.get("Authorization"))
             token = request.headers.get("Authorization")[7:]
             valid = decode_token(token)
 
@@ -128,7 +129,7 @@ def GetOrDelQuestion(id:str):
     except JwtError as e:
         return {"error": 401, "message": "You do not have the permission to do this", "details":e.message}, 401
     except TypeError as e:
-        return {"error": 401, "message": "You need to specify an Auth"}, 401
+        return {"error": 401, "message": "You need to specify an Auth", "details": str(e)}, 401
     except RuntimeError as e:
         return {"error": 500, "message": "Something went wrong while fetching the question", "details": str(e)}, 500
     except IndexError as e:

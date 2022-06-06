@@ -25,6 +25,7 @@
 import quizApiService from "@/services/quizApiService";
 import participationStorageService from "../services/ParticipationStorageService";
 import QuestionListVue from "../components/QuestionList.vue";
+import jwt_decode from 'jwt-decode';
 
 export default {
   name: "Admin",
@@ -35,7 +36,16 @@ export default {
     };
   },
   async created() {
-      this.token = participationStorageService.getAccessToken();
+        this.token = participationStorageService.getAccessToken();
+
+        var decoded = jwt_decode(this.token);
+
+        var currentTime = Math.round(+new Date()/1000);
+
+        if(currentTime > decoded.exp){
+            participationStorageService.deleteAccessToekn();
+            this.$router.push("/admin");
+        }
   },
   components: {
     QuestionListVue

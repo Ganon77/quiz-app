@@ -13,7 +13,7 @@
 }
 
 .back-home > button {
-    color: white;
+    color: #FFFFB5;
 }
 
 .top3 {
@@ -25,12 +25,12 @@
 }
 
 .top3 > .box {
-    background: green;
+    background: #6B8C42;
     display: flex;
     justify-content: space-around;
     align-items: center;
     margin: 20px;
     height: 50px;
     border-radius: 10px;
-    color: white
+    color: #FFFFB5
 }
