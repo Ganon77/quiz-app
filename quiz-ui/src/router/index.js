@@ -5,6 +5,7 @@ import Questions from '../views/Questions.vue'
 import Score from '../views/Score.vue'
 import Admin from '../views/Admin.vue'
 import AdminQuestionDisplay from '../views/AdminQuestionDisplay.vue'
+import EditQuestion from '../views/EditQuestion.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +25,12 @@ const router = createRouter({
       name: "AdminQuestionDisplay",
       props: true,
       component: AdminQuestionDisplay,
+    },
+    {
+      path: "/edit-question/:position",
+      name: "EditQuestion",
+      props: true,
+      component: EditQuestion,
     },
     {
       path: "/start-quiz",

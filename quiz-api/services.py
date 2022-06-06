@@ -72,7 +72,7 @@ def GetAllQuestionsFromDatabase():
     try:
 
         question_data = f"""SELECT questions.text, title, position, image, answers.text, isCorrect FROM questions
-        JOIN answers ON answers.questionId = questions.position"""
+        JOIN answers ON answers.questionId = questions.id"""
 
         get_result = cur.execute(question_data)
 
@@ -102,7 +102,7 @@ def GetAllQuestionsFromDatabase():
         db_connection.close()
         raise RuntimeError(str(e))
 
-def GetQuestionFromDatabase(id:str):
+def GetQuestionFromDatabase(position:str):
     db_connection = sqlite3.connect(database_path)
     db_connection.isolation_level = None
     cur = db_connection.cursor()    
@@ -110,8 +110,8 @@ def GetQuestionFromDatabase(id:str):
     try:
 
         question_data = f"""SELECT questions.text, title, position, image, answers.text, isCorrect FROM questions
-        JOIN answers ON answers.questionId = questions.position
-        WHERE questions.position = {id}"""
+        JOIN answers ON answers.questionId = questions.id
+        WHERE questions.position = {position}"""
 
         get_result = cur.execute(question_data)
 
@@ -135,7 +135,7 @@ def GetQuestionFromDatabase(id:str):
         db_connection.close()
         raise RuntimeError(str(e))
 
-def UpdateQuestionFromDatabase(id:str, questionUpdated:Question):
+def UpdateQuestionFromDatabase(position:str, questionUpdated:Question):
     db_connection = sqlite3.connect(database_path)
     db_connection.isolation_level = None
     cur = db_connection.cursor()    
@@ -144,20 +144,28 @@ def UpdateQuestionFromDatabase(id:str, questionUpdated:Question):
 
     try:
 
-        update_question_all = f"""UPDATE questions
-        SET position=position+1
-        WHERE position >= {questionUpdated.position}"""
+        question = f"""SELECT id FROM questions WHERE position = {position}"""
+        print(question)
+        cur.execute(question)
+
+        rows = cur.fetchall()
+
+        id = rows[0][0]
+
+        update_question_all_back = f"""UPDATE questions
+        SET position=position-1
+        WHERE position <= {questionUpdated.position}"""
 
         update_question = f"""UPDATE questions
         SET text="{questionUpdated.text}",
         title="{questionUpdated.title}",
         position={questionUpdated.position},
         image="{questionUpdated.image}"
-        WHERE position={id}"""
+        WHERE id={id}"""
 
         delete_answers = f"""DELETE FROM answers WHERE questionId = {id}"""
 
-        delete_result = cur.execute(update_question_all)
+        cur.execute(update_question_all_back)
         cur.execute(update_question)
         delete_result = cur.execute(delete_answers)
 
@@ -176,7 +184,7 @@ def UpdateQuestionFromDatabase(id:str, questionUpdated:Question):
         db_connection.close()
         raise RuntimeError(str(e))
 
-def DeleteQuestionFromDatabase(id:str):
+def DeleteQuestionFromDatabase(position:str):
     db_connection = sqlite3.connect(database_path)
     db_connection.isolation_level = None
     cur = db_connection.cursor()    
@@ -185,8 +193,41 @@ def DeleteQuestionFromDatabase(id:str):
 
     try:
 
+        question = f""" SELECT id FROM questions WHERE position = {position}"""
+
+        cur.execute(question)
+
+        rows = cur.fetchall()
+
+        id = rows[0][0]
+
         delete_answers = f"""DELETE FROM answers WHERE questionId = {id}"""
         delete_questions = f"""DELETE FROM questions WHERE id = {id}"""
+                         
+        delete_result = cur.execute(delete_answers)
+        delete_result = cur.execute(delete_questions)
+        
+        cur.execute("commit")
+
+        db_connection.close()
+
+    except Exception as e:
+        cur.execute('rollback')
+        db_connection.close()
+        raise RuntimeError(str(e))
+
+def DeleteQuestionsFromDatabase():
+    db_connection = sqlite3.connect(database_path)
+    db_connection.isolation_level = None
+    cur = db_connection.cursor()    
+
+    cur.execute("begin")
+
+    try:
+
+
+        delete_answers = f"""DELETE FROM answers"""
+        delete_questions = f"""DELETE FROM questions"""
                          
         delete_result = cur.execute(delete_answers)
         delete_result = cur.execute(delete_questions)

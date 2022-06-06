@@ -24,7 +24,7 @@
     </div>
 
     <div v-if="isAdmin" class="button-wrapper">
-      <button class="button">Modifier</button>
+      <button class="button" @click="goToEdit">Modifier</button>
       <button class="button">Supprimer</button>
     </div>
     
@@ -39,6 +39,11 @@ export default {
     },
     isAdmin: {
       type: Boolean
+    }
+  },
+  methods: {
+    goToEdit(){
+     this.$router.push(`/edit-question/${this.question.position}`);
     }
   }
 }

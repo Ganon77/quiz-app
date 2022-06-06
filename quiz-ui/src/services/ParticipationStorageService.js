@@ -24,5 +24,8 @@ export default {
   },
   getAccessToken() {
     return localStorage.getItem("token");
+  },
+  deleteAccessToekn(){
+    localStorage.removeItem('token');
   }
 };

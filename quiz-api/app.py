@@ -1,6 +1,5 @@
-from turtle import position
 from flask import Flask, request
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from jwt_utils import JwtError, build_token, decode_token
 from mapping import CastJsonToParticipation, CastJsonToQuestion, CastParticipationToJson, CastQuestionToJson
 from services import *
@@ -42,11 +41,9 @@ def login():
 
     return {"token": token}
 
-@app.route("/questions", methods=['POST', 'GET'])
+@app.route("/questions", methods=['POST', 'GET', 'DELETE'])
 def AddQuestion():
     try:
-
-
         if(request.method == 'POST'):
             token = request.headers.get("Authorization")[7:]
             
@@ -63,7 +60,15 @@ def AddQuestion():
         if(request.method == 'GET'):
             questions = GetAllQuestionsFromDatabase()
 
-            return {"questions": questions} 
+            return {"questions": sorted(questions, key=lambda d: d['position']) } 
+
+        elif(request.method == 'DELETE'):
+            token = request.headers.get("Authorization")[7:]
+            valid = decode_token(token)
+
+            DeleteQuestionsFromDatabase()
+            
+            return {"message": "successfully deleted questions"}, 204
 
     except KeyError:
         return {"error": 400, "message": "Wrong request format"}, 400
@@ -93,10 +98,12 @@ def GetOrDelQuestion(id:str):
             valid = decode_token(token)
 
             question = GetQuestionFromDatabase(id)
+
             if(question is None):
                 return {"error": 404, "message": f"Question with id {id} not found"}, 404
 
             payload = request.get_json()
+
             question = CastJsonToQuestion(payload)
 
             UpdateQuestionFromDatabase(id, question)          

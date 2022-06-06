@@ -41,5 +41,11 @@ export default {
   },
   login(payload){
     return this.call("post", "login", payload);
+  },
+  changeQuestion(method, body, token, oldPosition){
+    return this.call(method, "questions/"+oldPosition, body, token);
+  },
+  validate(token){
+    return this.call("post", "valid/", token=token);
   }
 };
