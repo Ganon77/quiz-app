@@ -26,13 +26,13 @@
         <h1>Réponses Possible</h1>
         <div class="answer-wrapper">   
             <template v-if="question.possibleAnswers.length > 0">
-                <div v-for="(answer, index) in question.possibleAnswers">
-                    <div v-if="answer.isCorrect"  class="goodAnswer">
-                        <input type="radio" v-model="selected" v-bind:value="answer" name="answers" @change="onChange($event)" checked/>
+                <div v-for="(answer, index) in question.possibleAnswers" class="answer-input">
+                    <div v-if="answer.isCorrect"  class="goodAnswer ">
+                        <input type="radio" class="select" v-model="selected" v-bind:value="answer" name="answers" @change="onChange($event)" checked/>
                         <input class="answerText" v-bind:name="'answer'+(index+1)" v-model="answer.text"/>
                     </div>
                     <div v-else class="wrongAnwser">
-                        <input type="radio" v-model="selected" v-bind:value="answer" name="answers" @change="onChange($event)"/>
+                        <input type="radio" class="select" v-model="selected" v-bind:value="answer" name="answers" @change="onChange($event)"/>
                         <input class="answerText" v-bind:name="'answer'+(index+1)" v-model="answer.text"/>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
             <template v-else>
                 <div v-for="i in 4">
                     <div class="wrongAnwser">
-                        <input type="radio" v-model="selected" v-bind:value="answer" name="answers" @change="onChange($event)"/>
+                        <input type="radio" class="select" v-model="selected" v-bind:value="answer" name="answers" @change="onChange($event)"/>
                         <input class="answerText" v-bind:name="'answer'+i"/>
                     </div>
                 </div>

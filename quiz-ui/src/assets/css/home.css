@@ -7,6 +7,7 @@ body {
   background: linear-gradient(to bottom, #7BC67B, #FFFFB5);
   color: #5A3921;
   margin: 0;
+  font-size: 18px;
 }
 
 .grand-container {
@@ -20,7 +21,7 @@ body {
   align-items: center;
   font-family: 'Jungle Monkey';
   font-weight: bolder;
-  color: #FFFFB5
+  color: #5A3921
 }
 
 .home-big-container {
