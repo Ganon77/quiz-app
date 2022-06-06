@@ -22,5 +22,6 @@
 }
 
 .question > p {
+    margin: 0;
     margin-left: 25px;
 }
