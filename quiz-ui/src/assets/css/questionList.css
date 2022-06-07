@@ -25,3 +25,15 @@
     margin: 0;
     margin-left: 25px;
 }
+
+.question-wrapper > button {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 30%;
+    height: 50px;
+    background: #6B8C42;
+}
+
+.question-wrapper > button:hover {
+    background: #5A3921;
+}

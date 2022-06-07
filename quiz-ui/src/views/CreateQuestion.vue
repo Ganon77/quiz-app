@@ -2,8 +2,8 @@
 @import '../assets/css/edit.css';
 </style>
 
-<template v-if="isAdmin">
-  <div v-if="question" class="answer-container">
+<template>
+  <div class="answer-container">
     <form class="edit-form" @submit.prevent="updateQuestion">
         <div class="input-wrapper">
 
@@ -15,38 +15,31 @@
 
             <div class="input-container">
                 <label for="titre">Titre</label>
-                <input type="text" placeholder="Titre" name="titre" v-model="question.title">
+                <input type="text" placeholder="Titre" name="titre" v-model="title">
             </div>
 
             <div class="input-container">
                 <label for="text">Intitulé</label>
-                <input type="text" placeholder="Intitulé" name="text" v-model="question.text">
+                <input type="text" placeholder="Intitulé" name="text" v-model="text">
             </div>            
         </div>       
         <h1>Réponses Possible</h1>
-        <div class="answer-wrapper">   
-            <template v-if="question.possibleAnswers.length > 0">
-                <div v-for="(answer, index) in question.possibleAnswers" class="answer-input">
-                    <div v-if="answer.isCorrect"  class="goodAnswer ">
-                        <input type="radio" class="select" v-model="selected" v-bind:value="answer" name="answers" @change="onChange($event)" checked/>
-                        <input class="answerText" v-bind:name="'answer'+(index+1)" v-model="answer.text"/>
-                    </div>
-                    <div v-else class="wrongAnwser">
-                        <input type="radio" class="select" v-model="selected" v-bind:value="answer" name="answers" @change="onChange($event)"/>
-                        <input class="answerText" v-bind:name="'answer'+(index+1)" v-model="answer.text"/>
-                    </div>
+        <div class="answer-wrapper">
+            <div v-for="i in 4" class="answer-input">
+                <div class="wrongAnwser">
+                    <input type="radio" class="select" v-model="selected" v-bind:value="answer" name="answers" @change="onChange($event)"/>
+                    <input class="answerText" v-bind:name="'answer'+i"/>
                 </div>
-            </template>
+            </div>
         </div>
 
         <div class="image-container">
             <ImageUploadVue @file-change="imageFileChangedHandler" />
-            <img v-bind:src="image"/>
+            <img v-if="image" v-bind:src="image"/>
         </div>
         
         <div class="submit-container">
-            <input class="submit" type="submit" value="Modifier"/>
-            <button class="submit" @click="cancel">Annuler</button>
+            <input class="submit" type="submit" value="Ajouter"/>
         </div>
         
     </form> 
@@ -60,13 +53,14 @@ import ImageUploadVue from "../components/ImageUpload.vue";
 import jwt_decode from 'jwt-decode';
 
 export default {
-  name: "EditQuestion",
+  name: "CreateQuestion",
   data() {
     return {
         token: null,
-        question: null,
         position: null,
         totalNumberOfQuestion: 1,
+        title: null,
+        text: null,
         image: null,
         selected: null,
         answer: null
@@ -90,28 +84,33 @@ export default {
       await quizApiService.getQuizInfo().then((response) => {
         this.totalNumberOfQuestion = response.data.size;
     })
-    this.loadQuestionByPosition();
     
   },
   methods: {
-    async loadQuestionByPosition(){
-      await quizApiService.getQuestion(this.$route.params.position).then((response) => {
-        this.question = response.data;
-        this.image = this.question.image;
-        this.position = this.question.position
-      })
-    },
     onChange(event) {
         var optionText = event.target.parentElement;
+
         const el = document.body.getElementsByClassName('goodAnswer');
-        el[0].classList.add('wrongAnwser');
-        el[0].classList.remove('goodAnswer');        
+
+        
+        if(el.length > 0){
+            el[0].classList.add('wrongAnwser');
+            el[0].classList.remove('goodAnswer');                   
+        }
+
+        console.log(optionText)
+        
+        optionText.classList.remove("wrongAnwser");
         optionText.classList.add("goodAnswer");
+
+        this.selected = optionText.children[1].value;
+        console.log(this.selected)
     },
     imageFileChangedHandler(b64String) {
         this.image = b64String;
     },
     async updateQuestion(submitEvent){
+        console.log(this.selected);
         const body = {
             "text": submitEvent.target.elements.text.value,
             "title": submitEvent.target.elements.titre.value,
@@ -120,29 +119,26 @@ export default {
             "possibleAnswers": [
                 {
                     "text": submitEvent.target.elements.answer1.value,
-                    "isCorrect": this.selected.text === submitEvent.target.elements.answer1.value,
+                    "isCorrect": this.selected === submitEvent.target.elements.answer1.value,
                 },
                 {
                     "text": submitEvent.target.elements.answer2.value,
-                    "isCorrect": this.selected.text === submitEvent.target.elements.answer2.value,
+                    "isCorrect": this.selected === submitEvent.target.elements.answer2.value,
                 },
                 {
                     "text": submitEvent.target.elements.answer3.value,
-                    "isCorrect": this.selected.text === submitEvent.target.elements.answer3.value,
+                    "isCorrect": this.selected === submitEvent.target.elements.answer3.value,
                 },
                 {
                     "text": submitEvent.target.elements.answer4.value,
-                    "isCorrect": this.selected.text === submitEvent.target.elements.answer4.value,
+                    "isCorrect": this.selected === submitEvent.target.elements.answer4.value,
                 }
             ]
         };
-
-        await quizApiService.changeQuestion("PUT", JSON.stringify(body), this.token, this.$route.params.position).then((response) => {
+                
+        await quizApiService.addQuestion(JSON.stringify(body), this.token).then((response) => {
             this.$router.push("/question-display/"+this.position)
         })
-    },
-    cancel(){
-        this.$router.push("/question-display/"+this.$route.params.position)
     }
   }
 }

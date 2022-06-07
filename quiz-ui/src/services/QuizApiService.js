@@ -46,6 +46,9 @@ export default {
   changeQuestion(method, body, token, oldPosition){
     return this.call(method, "questions/"+oldPosition, body, token);
   },
+  addQuestion(body, token){
+    return this.call("post", "questions", body, token);
+  },
   deleteQuestion(token, position){
     return this.call("delete", "questions/"+position, null, token);
   }

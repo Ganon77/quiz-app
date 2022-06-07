@@ -16,7 +16,6 @@
     </template>
     <template v-else>
         <QuestionListVue @question-selected="goToQuestion"></QuestionListVue>
-        <router-view></router-view>
     </template>
 </template>
 

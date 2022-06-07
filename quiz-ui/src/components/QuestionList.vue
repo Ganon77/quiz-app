@@ -5,6 +5,8 @@
 <template>
     <div class="question-wrapper">
         <h1>Questions</h1>
+        <button @click="goToCreate">Créer une question</button>
+        
         <div v-for="(question, index) in questions" class="question" @click="$emit('question-selected', question.position)">
             <p>{{index+1}})</p>
             <p>{{question.text}}</p>             
@@ -36,6 +38,11 @@ export default {
         await quizApiService.getAllQuestions().then((response) => {
             this.questions = response.data.questions
         })
+    },
+    methods: {
+        goToCreate(){
+            this.$router.push("/create-question")
+        }
     }
 }
 </script>
