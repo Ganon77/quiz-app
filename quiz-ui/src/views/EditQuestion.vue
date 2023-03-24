@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import quizApiService from "@/services/quizApiService";
+import quizApiService from "@/services/QuizApiService";
 import participationStorageService from "@/services/ParticipationStorageService";
 import ImageUploadVue from "../components/ImageUpload.vue";
 import jwt_decode from 'jwt-decode';

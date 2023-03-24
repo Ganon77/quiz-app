@@ -1,12 +1,25 @@
+from flask_mysqldb import MySQL
+import os
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
 from jwt_utils import JwtError, build_token, decode_token
 from mapping import CastJsonToParticipation, CastJsonToQuestion, CastParticipationToJson, CastQuestionToJson
 from services import *
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 
+app.config['MYSQL_HOST'] = os.environ.get("MYSQL_SERVICE_HOST")
+app.config['MYSQL_USER'] = os.environ.get("DB_LOGIN")
+app.config['MYSQL_PASSWORD'] = os.environ.get("DB_PASSWORD")
+app.config['MYSQL_DB'] = os.environ.get("MYSQL_DB")
+
+print(app.config)
+
+mysql = MySQL(app)
 
 @app.route('/')
 def hello_world():
@@ -16,8 +29,8 @@ def hello_world():
 @app.route('/quiz-info', methods=['GET'])
 def GetQuizInfo():
 
-    numberOfQuestion = GetNumberOfQuestions()
-    participations:list = getAllParticipation()
+    numberOfQuestion = GetNumberOfQuestions(mysql)
+    participations = getAllParticipation(mysql)
 
     participations = sorted(participations, key=lambda d: d['score'], reverse=True) 
     
@@ -53,12 +66,12 @@ def AddQuestion():
 
             question = CastJsonToQuestion(payload)
 
-            AddQuestionToDatabase(question)
+            AddQuestionToDatabase(question, mysql)
 
             return CastQuestionToJson(question)
         
         if(request.method == 'GET'):
-            questions = GetAllQuestionsFromDatabase()
+            questions = GetAllQuestionsFromDatabase(mysql)
 
             return {"questions": sorted(questions, key=lambda d: d['position']) } 
 
@@ -66,7 +79,7 @@ def AddQuestion():
             token = request.headers.get("Authorization")[7:]
             valid = decode_token(token)
 
-            DeleteQuestionsFromDatabase()
+            DeleteQuestionsFromDatabase(mysql)
             
             return {"message": "successfully deleted questions"}, 204
 
@@ -85,7 +98,7 @@ def GetOrDelQuestion(id:str):
 
         if(request.method == 'GET'):       
 
-            question = GetQuestionFromDatabase(id)
+            question = GetQuestionFromDatabase(id, mysql)
 
             if(question is None):
                 return {"error": 404, "message": f"Question with id {id} not found"}, 404
@@ -97,7 +110,7 @@ def GetOrDelQuestion(id:str):
             token = request.headers.get("Authorization")[7:]
             valid = decode_token(token)
 
-            question = GetQuestionFromDatabase(id)
+            question = GetQuestionFromDatabase(id, mysql)
 
             if(question is None):
                 return {"error": 404, "message": f"Question with id {id} not found"}, 404
@@ -106,7 +119,7 @@ def GetOrDelQuestion(id:str):
 
             question = CastJsonToQuestion(payload)
 
-            UpdateQuestionFromDatabase(id, question)          
+            UpdateQuestionFromDatabase(id, question, mysql)          
 
             return CastQuestionToJson(question)
 
@@ -115,12 +128,12 @@ def GetOrDelQuestion(id:str):
             token = request.headers.get("Authorization")[7:]
             valid = decode_token(token)
 
-            question = GetQuestionFromDatabase(id)
+            question = GetQuestionFromDatabase(id, mysql)
 
             if(question is None):
                 return {"error": 404, "message": f"Question with id {id} not found"}, 404
 
-            DeleteQuestionFromDatabase(id)
+            DeleteQuestionFromDatabase(id, mysql)
             
             return {"question": CastQuestionToJson(question)}, 204
 
@@ -144,17 +157,17 @@ def createParticipation():
 
             participation = CastJsonToParticipation(payload)
 
-            if(len(participation.answers) != GetNumberOfQuestions()):
+            if(len(participation.answers) != GetNumberOfQuestions(mysql)):
                 return {"error": 400, "message": "Number of answers must match the number of questions"}, 400
 
-            participation = AddParticipationToDatabase(participation)
+            participation = AddParticipationToDatabase(participation, mysql)
 
             return CastParticipationToJson(participation)
         elif(request.method == 'DELETE'):
             token = request.headers.get("Authorization")[7:]
             valid = decode_token(token)
 
-            DeleteAllParticipations()
+            DeleteAllParticipations(mysql)
 
             return {"message": "participations deleted"}, 204
 
@@ -163,7 +176,7 @@ def createParticipation():
     except IndexError as e:
         return {"error": 404, "message": str(e)}, 404
     except TypeError as e:
-        return {"error": 401, "message": "You need to specify an Auth"}, 401
+        return {"error": 401, "message": "You need to specify an Auth", "details": str(e)}, 401
     except RuntimeError as e:
         return {"error": 500, "message": "Something went wrong while adding the pariticipation", "details": str(e)}, 500
 

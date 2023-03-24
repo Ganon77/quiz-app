@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quiz-api
+  namespace: virtu-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quiz-api
+  template:
+    metadata:
+      labels:
+        app: quiz-api
+    spec:
+      containers:
+        - image: damienesiee/quiz-api:latest
+          imagePullPolicy: Always
+          name: quiz-api
+          env:
+          - name: DB_LOGIN
+            value: root
+          - name: DB_PASSWORD
+            value: root
+          - name: MYSQL_DB
+            value: quiz
+      restartPolicy: Always

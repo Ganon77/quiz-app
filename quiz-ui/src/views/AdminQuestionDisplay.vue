@@ -9,7 +9,7 @@
 
 <script>
 import QuestionDisplay from "../components/QuestionDisplay.vue"
-import quizApiService from "@/services/quizApiService";
+import quizApiService from "@/services/QuizApiService";
 import participationStorageService from "@/services/ParticipationStorageService";
 import jwt_decode from 'jwt-decode';
 

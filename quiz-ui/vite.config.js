@@ -1,9 +1,11 @@
-import { fileURLToPath, URL } from 'url'
 
-import { defineConfig, loadEnv } from 'vite'
+import {
+  defineConfig,
+  loadEnv 
+} from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
+const path = require('path')
 
 export default ({ mode }) => {
   // eslint-disable-next-line no-undef
@@ -13,11 +15,9 @@ export default ({ mode }) => {
     plugins: [vue()],
     resolve: {
       alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url))
+        '@': path.resolve(__dirname, 'src'),
       }
     },
-    // eslint-disable-next-line no-undef
-    base: `${process.env.VITE_BASE}`,
     build: {
       emptyOutDir: true
     }

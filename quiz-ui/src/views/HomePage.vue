@@ -9,8 +9,8 @@
       <img src="../assets/pics/logo.png" />
     </div>
 
-    <div class="home-big-container" v-if="registeredScores.length > 0">
-      <template v-for="index in 6">
+    <div class="home-big-container" v-if="registeredScores.length >= 1">
+      <template v-for="index in registeredScores.length">
         <div v-if="index <= 3"  v-bind:class="'n' + index">
           {{ registeredScores[index-1].playerName }} - {{ registeredScores[index-1].score }}
           <img class="picto" src="../assets/pics/banana_3.png" v-if="index == 1" />
@@ -34,7 +34,7 @@
 
 <script>
 
-import quizApiService from "@/services/quizApiService";
+import quizApiService from "@/services/QuizApiService";
 
 export default {
   name: "HomePage",
@@ -48,6 +48,8 @@ export default {
     await quizApiService.getQuizInfo().then((response) => {
       this.registeredScores = response.data.scores
     })
+
+    console.log(this.registeredScores[0].playerName)
   }
 };
 </script>

@@ -1,13 +1,8 @@
 from mapping import CastParticipationToJson, CastQuestionToJson
 from models import Answer, Participation, PossibleAnswers, Question
-import sqlite3
 
-database_path = "../database.db"
-
-def GetNumberOfQuestions():
-    db_connection = sqlite3.connect(database_path)
-    db_connection.isolation_level = None
-    cur = db_connection.cursor()
+def GetNumberOfQuestions(sql):
+    cur = sql.connection.cursor()
 
     try:
 
@@ -20,14 +15,12 @@ def GetNumberOfQuestions():
         return len(rows)
 
     except Exception as e:
-        db_connection.close()
+        cur.close()
         raise RuntimeError(str(e))
 
 
-def AddQuestionToDatabase(question:Question):
-    db_connection = sqlite3.connect(database_path)
-    db_connection.isolation_level = None
-    cur = db_connection.cursor()
+def AddQuestionToDatabase(question, sql):
+    cur = sql.connection.cursor()
 
     cur.execute("begin")
 
@@ -55,17 +48,15 @@ def AddQuestionToDatabase(question:Question):
 
         cur.execute("commit")        
 
-        db_connection.close()
+        cur.close()
 
     except Exception as e:
         cur.execute('rollback')
-        db_connection.close()
+        cur.close()
         raise RuntimeError(str(e))
 
-def GetAllQuestionsFromDatabase():
-    db_connection = sqlite3.connect(database_path)
-    db_connection.isolation_level = None
-    cur = db_connection.cursor()    
+def GetAllQuestionsFromDatabase(sql):
+    cur = sql.connection.cursor()
 
     try:
 
@@ -92,18 +83,16 @@ def GetAllQuestionsFromDatabase():
         question = Question(title=rows[-1][1], text=rows[-1][0], position=rows[-1][2], image=rows[-1][3], possibleAnswers=PossibleAnswers(answers))
         questions.append(CastQuestionToJson(question))
 
-        db_connection.close()
+        cur.close()
 
         return questions
 
     except Exception as e:
-        db_connection.close()
+        cur.close()
         raise RuntimeError(str(e))
 
-def GetQuestionFromDatabase(position:str):
-    db_connection = sqlite3.connect(database_path)
-    db_connection.isolation_level = None
-    cur = db_connection.cursor()    
+def GetQuestionFromDatabase(position, sql):
+    cur = sql.connection.cursor()   
 
     try:
 
@@ -125,18 +114,16 @@ def GetQuestionFromDatabase(position:str):
 
         question = Question(title=rows[0][1], text=rows[0][0], position=rows[0][2], image=rows[0][3], possibleAnswers=PossibleAnswers(answers))
 
-        db_connection.close()
+        cur.close()
 
         return question
 
     except Exception as e:
-        db_connection.close()
+        cur.close()
         raise RuntimeError(str(e))
 
-def UpdateQuestionFromDatabase(position:str, questionUpdated:Question):
-    db_connection = sqlite3.connect(database_path)
-    db_connection.isolation_level = None
-    cur = db_connection.cursor()    
+def UpdateQuestionFromDatabase(position, questionUpdated, sql):
+    cur = sql.connection.cursor()
 
     cur.execute("begin")
 
@@ -180,17 +167,15 @@ def UpdateQuestionFromDatabase(position:str, questionUpdated:Question):
                     
         cur.execute("commit")
 
-        db_connection.close()
+        cur.close()
 
     except Exception as e:
         cur.execute('rollback')
-        db_connection.close()
+        cur.close()
         raise RuntimeError(str(e))
 
-def DeleteQuestionFromDatabase(position:str):
-    db_connection = sqlite3.connect(database_path)
-    db_connection.isolation_level = None
-    cur = db_connection.cursor()    
+def DeleteQuestionFromDatabase(position, sql):
+    cur = sql.connection.cursor()
 
     cur.execute("begin")
 
@@ -219,17 +204,15 @@ def DeleteQuestionFromDatabase(position:str):
         
         cur.execute("commit")
 
-        db_connection.close()
+        cur.close()
 
     except Exception as e:
         cur.execute('rollback')
-        db_connection.close()
+        cur.close()
         raise RuntimeError(str(e))
 
-def DeleteQuestionsFromDatabase():
-    db_connection = sqlite3.connect(database_path)
-    db_connection.isolation_level = None
-    cur = db_connection.cursor()    
+def DeleteQuestionsFromDatabase(sql):
+    cur = sql.connection.cursor()  
 
     cur.execute("begin")
 
@@ -244,18 +227,16 @@ def DeleteQuestionsFromDatabase():
         
         cur.execute("commit")
 
-        db_connection.close()
+        cur.close()
 
     except Exception as e:
         cur.execute('rollback')
-        db_connection.close()
+        cur.close()
         raise RuntimeError(str(e))
 
 
-def AddParticipationToDatabase(participation:Participation):
-    db_connection = sqlite3.connect(database_path)
-    db_connection.isolation_level = None
-    cur = db_connection.cursor()
+def AddParticipationToDatabase(participation, sql):
+    cur = sql.connection.cursor()
 
     cur.execute("begin")
 
@@ -308,20 +289,18 @@ def AddParticipationToDatabase(participation:Participation):
 
         cur.execute("commit")        
 
-        db_connection.close()
+        cur.close()
 
         return participation
         
     except Exception as e:
         cur.execute('rollback')
-        db_connection.close()
+        cur.close()
         raise RuntimeError(str(e))
 
 
-def DeleteAllParticipations():
-    db_connection = sqlite3.connect(database_path)
-    db_connection.isolation_level = None
-    cur = db_connection.cursor()    
+def DeleteAllParticipations(sql):
+    cur = sql.connection.cursor()  
 
     cur.execute("begin")
 
@@ -335,18 +314,16 @@ def DeleteAllParticipations():
         
         cur.execute("commit")
 
-        db_connection.close()
+        cur.close()
 
     except Exception as e:
         cur.execute('rollback')
-        db_connection.close()
+        cur.close()
         raise RuntimeError(str(e))
 
 
-def getAllParticipation():
-    db_connection = sqlite3.connect(database_path)
-    db_connection.isolation_level = None
-    cur = db_connection.cursor()    
+def getAllParticipation(sql):
+    cur = sql.connection.cursor()
 
     try:
 
@@ -361,11 +338,11 @@ def getAllParticipation():
         for row in rows:
             participations.append(CastParticipationToJson(Participation(answers=[], playerName=row[0], score=row[1])))
         
-        db_connection.close()
+        cur.close()
 
         return participations
 
     except Exception as e:
         cur.execute('rollback')
-        db_connection.close()
+        cur.close()
         raise RuntimeError(str(e))

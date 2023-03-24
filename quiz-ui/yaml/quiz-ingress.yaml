@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: quiz-ingress
+  namespace: virtu-project
+spec:
+  rules:
+    - host: virtu.esiee
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: quiz-app
+                port:
+                  number: 8080
+    - host: quiz-api
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: quiz-api
+                port:
+                  number: 80
+          

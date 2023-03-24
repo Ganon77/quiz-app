@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: quiz-api
+  namespace: virtu-project
+spec:
+  ports:
+    - name: http
+      targetPort: 5000
+      port: 80
+  selector:
+    app: quiz-api
+  type: ClusterIP

@@ -9,7 +9,7 @@
       
         <div class="top3">
           <h2>Top 3 des meilleurs joueurs</h2>
-          <template v-for="index in 3">
+          <template v-for="index in registeredScores.length">
             <div class="box">
               {{ registeredScores[index-1].playerName }} - {{ registeredScores[index-1].score }}
             </div>
@@ -24,7 +24,7 @@
 
 <script>
 import participationStorageService from "../services/ParticipationStorageService";
-import quizApiService from "@/services/quizApiService";
+import quizApiService from "@/services/QuizApiService";
 
 export default {
   name: "Score",

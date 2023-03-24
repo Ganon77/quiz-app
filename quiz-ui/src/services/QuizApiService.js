@@ -11,6 +11,8 @@ export default {
       "Content-Type": "application/json",
     };
 
+    console.log(`${import.meta.env.VITE_API_URL}/${resource}`)
+
     if (token != null) {
       headers.authorization = "Bearer " + token;
     }
