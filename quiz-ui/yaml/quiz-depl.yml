@@ -19,5 +19,8 @@ spec:
           name: quiz-app
           env:
           - name: VITE_API_URL
-            value: http://quiz-api
+            valueFrom:
+              configMapKeyRef:
+                name: quiz-app-conf
+                key: VITE_API_URL
       restartPolicy: Always

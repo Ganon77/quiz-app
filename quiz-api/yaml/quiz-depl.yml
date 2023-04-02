@@ -19,9 +19,18 @@ spec:
           name: quiz-api
           env:
           - name: DB_LOGIN
-            value: root
+            valueFrom:
+              configMapKeyRef:
+                name: quiz-api-conf
+                key: DB_LOGIN
           - name: DB_PASSWORD
-            value: root
+            valueFrom:
+              secretKeyRef:
+                name: mysql-pass
+                key: password
           - name: MYSQL_DB
-            value: quiz
+            valueFrom:
+              configMapKeyRef:
+                name: quiz-api-conf
+                key: MYSQL_DB
       restartPolicy: Always
